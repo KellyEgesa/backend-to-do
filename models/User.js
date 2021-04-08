@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
     minLength: 8,
     maxLength: 64,
   },
+  company: [
+    {
+      company_id: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+    },
+  ],
   confirmed: { type: Boolean, default: false },
   resetPassword: {
     token: {
