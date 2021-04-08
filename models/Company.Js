@@ -32,3 +32,6 @@ function validateCompany(company) {
     companyLogo: joi.string().min(3).max(256).required(),
   });
 }
+
+module.exports = Company;
+module.exports = validateCompany;

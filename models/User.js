@@ -74,3 +74,7 @@ function validateLogin(user) {
   });
   return schema.valid(user);
 }
+
+module.exports = User;
+module.exports = validateUser;
+module.exports = validateLogin;
