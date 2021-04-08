@@ -33,6 +33,12 @@ const userSchema = new mongoose.Schema({
     minLength: 8,
     maxLength: 64,
   },
+  profilePhoto: {
+    required: true,
+    type: String,
+    minLength: 3,
+    maxLength: 256,
+  },
   company: [
     {
       company_id: mongoose.Schema.Types.ObjectId,
@@ -64,7 +70,7 @@ function validateUser(user) {
     phoneNumber: Joi.number().min(10).max(12).required(),
     password: Joi.string().min(8).max(64),
   });
-  return schema.valid(user);
+  return schema.validate(user);
 }
 
 function validateLogin(user) {
@@ -72,7 +78,7 @@ function validateLogin(user) {
     email: Joi.string().email().min(3).max(64).required(),
     password: Joi.string().min(8).max(64),
   });
-  return schema.valid(user);
+  return schema.validate(user);
 }
 
 module.exports = User;

@@ -10,11 +10,14 @@ const companySchema = new mongoose.Schema({
   },
   createdAt: {
     required: true,
+    default: Date.now(),
     type: Date,
   },
   companyLogo: {
     required: true,
     type: String,
+    minLength: 3,
+    maxLength: 256,
   },
   editor: {
     required: true,
@@ -31,6 +34,7 @@ function validateCompany(company) {
     createdAt: joi.date().required(),
     companyLogo: joi.string().min(3).max(256).required(),
   });
+  return schema.validate(company);
 }
 
 module.exports = Company;
