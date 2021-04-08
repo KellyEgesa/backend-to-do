@@ -1,6 +1,13 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 const port = 3000;
 
-app.get("/", (req, res) => res.send("Hello World!"));
+const User = require("./route/User");
+
+app.use(cors());
+app.use(express.json());
+app.use("/api/user", User);
+
 app.listen(port, () => console.log(`Listening to port ${port}`));

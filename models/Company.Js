@@ -21,7 +21,7 @@ const companySchema = new mongoose.Schema({
   },
   editor: {
     required: true,
-    user_id: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
 });

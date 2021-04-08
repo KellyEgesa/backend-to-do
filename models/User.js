@@ -41,7 +41,7 @@ const userSchema = new mongoose.Schema({
   },
   company: [
     {
-      company_id: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Company",
     },
   ],
@@ -81,6 +81,6 @@ function validateLogin(user) {
   return schema.validate(user);
 }
 
-module.exports = User;
-module.exports = validateUser;
-module.exports = validateLogin;
+module.exports.User = User;
+module.exports.validateUser = validateUser;
+module.exports.validateLogin = validateLogin;
