@@ -34,7 +34,6 @@ const userSchema = new mongoose.Schema({
     maxLength: 64,
   },
   profilePhoto: {
-    required: true,
     type: String,
     minLength: 3,
     maxLength: 256,
@@ -62,13 +61,14 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model("User", userSchema);
 
+//More authentication needed under phoneNumber
 function validateUser(user) {
   const schema = Joi.object({
     email: Joi.string().email().min(3).max(64).required(),
     firstName: Joi.string().min(3).max(64).required(),
     lastName: Joi.string().min(3).max(64).required(),
-    phoneNumber: Joi.number().min(10).max(12).required(),
-    password: Joi.string().min(8).max(64),
+    phoneNumber: Joi.number().required(),
+    password: Joi.string().min(8).max(64).required(),
   });
   return schema.validate(user);
 }
