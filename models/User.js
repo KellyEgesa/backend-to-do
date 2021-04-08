@@ -33,6 +33,19 @@ const userSchema = new mongoose.Schema({
     minLength: 8,
     maxLength: 64,
   },
+  confirmed: { type: Boolean, default: false },
+  resetPassword: {
+    token: {
+      type: String,
+    },
+    expireDate: {
+      type: Date,
+    },
+  },
+  isAdmin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
@@ -53,4 +66,5 @@ function validateLogin(user) {
     email: Joi.string().email().min(3).max(64).required(),
     password: Joi.string().min(8).max(64),
   });
+  return schema.valid(user);
 }
