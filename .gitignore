@@ -117,4 +117,4 @@ dist
 .pnp.*
 
 #personalFiles
-.secrets.js
+/secrets.js
