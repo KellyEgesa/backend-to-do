@@ -1,6 +1,8 @@
 const { User, validateLogin, validateUser } = require("../models/User");
+const { sendEmail } = require("../email/email");
 const express = require("express");
 const bcrypt = require("bcrypt");
+const { result } = require("lodash");
 
 const router = express.Router();
 
@@ -30,6 +32,16 @@ router.post("/create", async (req, res) => {
   newUser.password = await bcrypt.hash(newUser.password, salt);
 
   const saved = await newUser.save();
+
+  sendEmail(
+    newUser.email,
+    "Confirmation of email to the ratiba app platform",
+    "<h1>Confirmation of email to the ratiba app platform</h1>"
+  )
+    .then((result) => console.log("Email sent", result))
+    .catch((error) => {
+      console.log(error.message);
+    });
 
   return res.send(saved);
 });

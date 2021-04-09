@@ -14,7 +14,7 @@ oAuth2Client.setCredentials({ refresh_token: Refresh_Token });
 async function sendEmail(receiver, subject, html) {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
-    const transport = nodemailer.createTestAccount({
+    const transport = nodemailer.createTransport({
       service: "gmail",
       auth: {
         type: "OAuth2",
@@ -33,9 +33,11 @@ async function sendEmail(receiver, subject, html) {
       html: html,
     };
 
-    let result = await transport.sendEmail(mailDetalils);
+    let result = await transport.sendMail(mailDetalils);
     return result;
   } catch (error) {
     return error;
   }
 }
+
+module.exports.sendEmail = sendEmail;
