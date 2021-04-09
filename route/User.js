@@ -31,7 +31,35 @@ router.post("/create", async (req, res) => {
 
   const saved = await newUser.save();
 
-  res.send(saved);
+  return res.send(saved);
+});
+
+router.post("/login", async (req, res) => {
+  const { error } = validateLogin(req.body);
+  if (error)
+    return res
+      .status(400)
+      .send({ message: error.details[0].message, status: "failed" });
+
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user)
+    return res.status(404).send({
+      message: "User doesnt exist, Kindly register first",
+      status: "Not found",
+    });
+
+  //   if (!user.confirmed)
+  //     return res.status(401).send({
+  //       message: `Kindly confirm your email address at ${user.email} to login`,
+  //     });
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword)
+    return res.status(400).send({
+      message: "Wrong password",
+    });
+  res.send(user);
 });
 
 module.exports = router;
