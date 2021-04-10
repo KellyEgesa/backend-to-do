@@ -73,7 +73,12 @@ router.put("/user/:id", auth, async (req, res) => {
     { email: req.body.email },
     { $push: { company: company } }
   )
-    .then((result) => {})
+    .then((result) => {
+      if (result.n === 0)
+        return res.status(404).send({ message: "User not found" });
+      if (result.nModified === 0)
+        return res.status(500).send({ message: "User not added" });
+    })
     .catch((error) => {
       res.status(500).send(error.details[0].message);
     });
