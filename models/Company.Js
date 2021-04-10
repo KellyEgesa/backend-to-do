@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 const joi = require("joi");
 
 const companySchema = new mongoose.Schema({
@@ -31,11 +32,18 @@ const Company = mongoose.model("Company", companySchema);
 function validateCompany(company) {
   const schema = joi.object({
     name: joi.string().min(3).max(64).required(),
-    createdAt: joi.date().required(),
     companyLogo: joi.string().min(3).max(256).required(),
+    editor: joi
+      .string()
+      .required()
+      .custom((value, helper) => {
+        if (!ObjectId.isValid(value)) {
+          return helper.message("Not a valid id");
+        }
+      }),
   });
   return schema.validate(company);
 }
 
-module.exports = Company;
-module.exports = validateCompany;
+module.exports.Company = Company;
+module.exports.validateCompany = validateCompany;

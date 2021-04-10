@@ -1,10 +1,11 @@
 const { User, validateLogin, validateUser } = require("../models/User");
+const mongoose = require("mongoose");
 const { sendEmail } = require("../email/email");
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { result } = require("lodash");
 
 const router = express.Router();
+const ObjectId = mongoose.Types.ObjectId;
 
 router.post("/create", async (req, res) => {
   const { error } = validateUser(req.body);
@@ -81,6 +82,13 @@ router.post("/login", async (req, res) => {
 });
 
 router.put("/confirm/:id", async (req, res) => {
+  const validId = ObjectId.isValid(req.params.id);
+
+  if (!validId)
+    return res.status(404).send({
+      message: "Invalid parameters",
+    });
+
   try {
     let user = await User.findByIdAndUpdate(
       { _id: req.params.id },
@@ -91,7 +99,6 @@ router.put("/confirm/:id", async (req, res) => {
     if (!user)
       return res.status(404).send({
         message: "User doesnt exist, Kindly register first",
-        status: "Not found",
       });
 
     res.send({ user: user, message: "Confirmed " });
