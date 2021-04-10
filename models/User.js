@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const { jwtPrivateKey } = require("../secrets");
+const { companySchema } = require("./Company.Js");
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -40,12 +41,7 @@ const userSchema = new mongoose.Schema({
     minLength: 3,
     maxLength: 256,
   },
-  company: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Company",
-    },
-  ],
+  company: [{ type: companySchema }],
   confirmed: { type: Boolean, default: false },
   resetPassword: {
     token: {

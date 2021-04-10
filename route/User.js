@@ -1,8 +1,10 @@
 const { User, validateLogin, validateUser } = require("../models/User");
 const mongoose = require("mongoose");
 const { sendEmail } = require("../email/email");
+
 const express = require("express");
 const bcrypt = require("bcrypt");
+const auth = require("../middleware/Auth");
 
 const router = express.Router();
 const ObjectId = mongoose.Types.ObjectId;
@@ -105,6 +107,21 @@ router.put("/confirm/:id", async (req, res) => {
   } catch (error) {
     return res.status(400).send({ message: "Something went wrong" });
   }
+});
+
+router.get("/retrieve/:id", auth, async (req, res) => {
+  const validId = ObjectId.isValid(req.params.id);
+
+  if (!validId)
+    return res.status(404).send({
+      message: "Invalid parameters",
+    });
+
+  const user = await User.findById(req.params.id).select("-password");
+
+  if (!user) return res.status(404).send({ message: "User not found" });
+
+  return res.send(user);
 });
 
 module.exports = router;

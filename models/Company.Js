@@ -45,5 +45,14 @@ function validateCompany(company) {
   return schema.validate(company);
 }
 
+function addUser(parameters) {
+  const schema = joi.object({
+    email: joi.string().email().required(),
+  });
+  return schema.validate(parameters);
+}
+
 module.exports.Company = Company;
 module.exports.validateCompany = validateCompany;
+module.exports.companySchema = companySchema;
+module.exports.addUser = addUser;
