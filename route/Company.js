@@ -1,5 +1,4 @@
 const express = require("express");
-const { Router } = require("express");
 const auth = require("../middleware/Auth");
 const { validateCompany, Company } = require("../models/Company.Js");
 
@@ -12,7 +11,14 @@ router.post("/create", auth, async (req, res) => {
       message: error.details[0].message,
     });
 
-  res.send("Succes");
+  let company = new Company({
+    name: req.body.name,
+    companyLogo: req.body.companyLogo,
+    editor: req.body.editor,
+  });
+
+  const saved = await company.save();
+  return res.send(saved);
 });
 
 module.exports = router;
