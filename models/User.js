@@ -7,6 +7,7 @@ const { companySchema } = require("./Company.Js");
 const userSchema = new mongoose.Schema({
   email: {
     required: true,
+    unique: true,
     type: String,
     minLength: 3,
     maxLength: 64,

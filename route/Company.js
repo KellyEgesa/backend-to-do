@@ -20,7 +20,6 @@ router.post("/create", auth, async (req, res) => {
   let user = await User.findById(req.body.editor);
   if (!user) res.status(404).send({ message: "User not found" });
 
-  res.send(req.user);
   let company = new Company({
     name: req.body.name,
     companyLogo: req.body.companyLogo,
@@ -35,7 +34,7 @@ router.post("/create", auth, async (req, res) => {
       { _id: req.body.editor },
       { $push: { company: result } }
     ).catch((error) => {
-      res.send(error.details[0].message);
+      res.status(500).send(error.details[0].message);
     });
   });
   return res.send(saved);
@@ -54,9 +53,32 @@ router.get("/retrieve/:id", auth, async (req, res) => {
   return res.send(company);
 });
 
-router.put("/user/:id", auth, (req, res) => {
+router.put("/user/:id", auth, async (req, res) => {
   const { error } = addUser(req.body);
   if (error) return res.status(400).send({ message: error.details[0].message });
+
+  let company;
+
+  await Company.findById(req.params.id)
+    .then((result) => {
+      company = result;
+    })
+    .catch((error) => {
+      return res.status(500).send(error.details[0].message);
+    });
+
+  let user;
+
+  await User.updateOne(
+    { email: req.body.email },
+    { $push: { company: company } }
+  )
+    .then((result) => {})
+    .catch((error) => {
+      res.status(500).send(error.details[0].message);
+    });
+
+  res.send(company);
 });
 
 module.exports = router;
