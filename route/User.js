@@ -124,4 +124,17 @@ router.get("/retrieve/:id", auth, async (req, res) => {
   return res.send(user);
 });
 
+router.delete("/delete/:id", auth, async (req, res) => {
+  const validId = ObjectId.isValid(req.params.id);
+
+  if (!validId)
+    return res.status(404).send({
+      message: "Invalid parameters",
+    });
+
+  const user = await User.findByIdAndDelete(req.params.id);
+  if (!user) return res.status(404).send({ message: "User not found" });
+
+  res.send(user);
+});
 module.exports = router;

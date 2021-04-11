@@ -67,8 +67,6 @@ router.put("/user/:id", auth, async (req, res) => {
       return res.status(500).send(error.details[0].message);
     });
 
-  let user;
-
   await User.updateOne(
     { email: req.body.email },
     { $push: { company: company } }
